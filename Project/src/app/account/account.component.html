@@ -1,0 +1,57 @@
+<h1>Accounts Page </h1>
+<img src="https://pbs.twimg.com/profile_images/956310291154792451/vnJC8b_P_400x400.jpg" style="height: 200px; width: 200px; margin: 20px;" alt="img">
+<h2>Welcome {{username}}</h2>
+
+<p>Your role/s is/are:</p>
+  <ul>
+    <li *ngFor="let role of roles">
+      {{ role }}
+    </li>
+  </ul>
+  <div *ngIf="groupadmin || superadmin">
+    <button (click)="onGotoGroupComponent($event)" id="creategroup">Create Group</button>
+    <button (click)="onGotoGroupComponent($event)" id="createchannel">Create Channel</button>
+    <button (click)="onGotoUserComponent($event)" id="createuser" >Create User</button>
+    <div *ngIf="groupadmin">
+      <button (click)="onGotoUserComponent($event)" id="adduseringroup">Add User in a Group</button>
+    </div>
+
+    <button (click)="onGotoUserComponent($event)" id="addusertochannel">Add User to a Channel</button>
+    <button (click)="onGotoGroupComponent($event)" id="removegroup">Remove Group</button>
+    <button (click)="onGotoGroupComponent($event)" id="removechannel">Remove Channel</button>
+    <div *ngIf="superadmin">
+      <button (click)="onGotoUserComponent($event)" id="assignuserrole">Assign user a Role</button>
+      <button (click)="onGotoUserComponent($event)" id="removeuser">Remove User</button>
+    </div>
+    <button (click)="onGotoUserComponent($event)" id="removeuserfromchannel">Remove user from channel</button>
+    <button (click)="onGotoUserComponent($event)" id="assignusergroupassis">Assign User a Group Assis Role</button>
+  </div>
+
+  <div *ngIf="groupassis">
+      <button (click)="onGotoUserComponent($event)" id="adduseringroup">Add User in a Group</button>
+      <button (click)="onGotoUserComponent($event)" id="removeuserfromgroup">Remove User from a Group</button>
+      <button (click)="onGotoGroupComponent($event)" id="createchannel">Create Channel in a Group</button>
+  </div>
+
+<div class="form-group">
+    <label for="groups">
+      Your Groups: 
+    </label>
+  <select id="group" name="group" [(ngModel)]='selectgroup' class="form-control">
+  <option *ngFor="let opt of group" [value]="opt">{{ opt }} </option>
+  </select>
+  </div>
+  <div class="form-group">
+    <label for="channels">
+      Your Channels
+    </label>
+  <select id="channel" name="channel" [(ngModel)]='selectchannel' class="form-control">
+  <option *ngFor="let channel of channels" [value]="channel">{{ channel }} </option>
+  </select>
+  </div>
+  <div *ngIf="error" class="alert alert-danger" role="alert">
+  {{errors}}
+  </div>
+<button class="btn btn-primary" (click)="onChannelClick()">View Channel History</button>
+<button class="btn btn-primary" style="margin-left: 40px;" (click)="onChatClick()">Goto Chat</button>
+<button style="margin-left: 40px;" class="btn btn-success" (click)="onLogOut()">Log Out</button>

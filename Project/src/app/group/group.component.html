@@ -1,0 +1,50 @@
+
+<div *ngIf="errors" class="alert alert-danger" role="alert">
+    {{error}}
+  </div>
+<div *ngIf="id=='creategroup'">
+    <b>Enter a Group Name: </b>
+    <input type="text" [(ngModel)]="groupname" name="groupname" required/>
+    <br>
+    <button class="btn btn-primary" (click)="CreateGroup()">Submit</button>
+</div>
+<div *ngIf="success" class="alert alert-success" role="alert">
+    {{successmsg}}
+  </div>
+
+
+<div *ngIf="id=='createchannel' || id=='removegroup'">
+        <div class="form-group">
+                <label for="groups">
+                  Your Group: 
+                </label>
+              <select id="group" name="group" [(ngModel)]='selectgroup' class="form-control">
+              <option *ngFor="let opt of groups" [value]="opt">{{ opt }} </option>
+              </select>
+              </div>
+
+              <div *ngIf="id=='createchannel'">
+              <b>Enter a Channel Name: </b>
+    <input type="text" [(ngModel)]="channelname" name="channelname" required/>
+    <br>
+    <button class="btn btn-primary" (click)="CreateChannel()">Create Channel</button>
+  </div>
+
+  <div *ngIf="id=='removegroup'">
+    <button class="btn btn-primary" (click)="RemoveGroup()">Remove Group</button>
+  </div>
+</div>
+
+<div *ngIf="id=='removechannel'">
+  <div class="form-group">
+    <label for="channels">
+      Channels
+    </label>
+  <select id="channel" name="channel" [(ngModel)]='selectchannel' class="form-control">
+  <option *ngFor="let channel of channels" [value]="channel">{{ channel }} </option>
+  </select>
+  </div>
+  <br>
+  <button class="btn btn-primary" (click)="RemoveChannel()">Remove Channel</button>
+</div>
+
