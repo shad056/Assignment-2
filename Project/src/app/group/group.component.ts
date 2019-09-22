@@ -79,15 +79,25 @@ export class GroupComponent implements OnInit, OnDestroy {
     else {
     this.service.AddChannel(this.selectgroup, this.channelname).subscribe(res => {
       if(res.valid===true){
-        this.errors = false;
+        this.service.AddChannelz(this.channelname).subscribe(ress => {
+        if(ress.valid === true) {
+          this.errors = false;
         this.success = true;
         this.successmsg = this.channelname + ' has been successfully added to the group ' + this.selectgroup;
+        }
+        else {
+          this.success = false;
+          this.errors = true;
+          this.error = 'Channel already exists, Please try again';
+        }
+        });
       }
       else {
         this.success = false;
         this.errors = true;
         this.error = 'Channel already exists, Please try again';
       }
+        
 
     });
     }
@@ -111,6 +121,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                   this.errors = false;
                   this.success = true;
                   this.successmsg = this.selectgroup + ' has been successfully removed ';
+                  setTimeout(function(){ location.reload(); }, 3000);
                 }
                 else {
                   this.success = false;
@@ -140,15 +151,41 @@ export class GroupComponent implements OnInit, OnDestroy {
     else {
       this.service.RemoveChannel(this.selectchannel).subscribe(res => {
         if(res.valid===true){
-          this.errors = false;
-          this.success = true;
-          this.successmsg = this.selectchannel + ' has been successfully removed ';
+          this.service.RemoveChannelz(this.selectchannel).subscribe(ress => {
+            if(ress.valid===true) {
+                  this.errors = false;
+              this.success = true;
+              this.successmsg = this.selectchannel + ' has been successfully removed ';
+              setTimeout(function(){ location.reload(); }, 3000);
+              // this.service.RemoveChannelzz(this.selectchannel).subscribe(resss => {
+              //   if(resss.valid===true) {
+              //     this.errors = false;
+              // this.success = true;
+              // this.successmsg = this.selectchannel + ' has been successfully removed ';
+              // setTimeout(function(){ location.reload(); }, 3000);
+              //   }
+              //   else {
+              //     this.success = false;
+              //     this.errors = true;
+              //     this.error = 'Channel doesnt exists, Please try again';
+              //   }
+              // });    
+              
+            }
+            else {
+              this.success = false;
+              this.errors = true;
+              this.error = 'Channel doesnt exists, Please try again';
+            }
+          });
+         
         }
         else {
           this.success = false;
           this.errors = true;
           this.error = 'Channel doesnt exists, Please try again';
         }
+       
   
       });
       }

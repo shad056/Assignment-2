@@ -155,11 +155,12 @@ export class UserComponent implements OnInit, OnDestroy {
           this.errors = false;
           this.success = true;
           this.successmsg = this.selectuser + ' has been successfully removed from the channel ' + this.selectchannel;
+          setTimeout(function(){ location.reload(); }, 3000);
         }
         else {
           this.success = false;
           this.errors = true;
-          this.error = res.message;
+          this.error = this.selectchannel + ' is not added to ' + this.selectuser;
         }
       });
     }
@@ -178,6 +179,7 @@ export class UserComponent implements OnInit, OnDestroy {
           this.errors = false;
           this.success = true;
           this.successmsg = this.selectuser + ' has been successfully removed';
+          setTimeout(function(){ location.reload(); }, 3000);
         }
         else {
           this.success = false;
@@ -195,8 +197,9 @@ export class UserComponent implements OnInit, OnDestroy {
     }
    
     else {
-      this.service.AssignUserGroupAssis(this.selectuser).subscribe(res => {
-        if(res.valid==true){
+      this.selectrole = "Group Assis";
+      this.service.AssignUserGroupAssis(this.selectuser,this.selectrole).subscribe(res => {
+        if(res.valid===true){
           this.errors = false;
           this.success = true;
           this.successmsg = this.selectuser + ' has been successfully assigned the role of Group Assis ';

@@ -56,5 +56,6 @@ require('./routes/assignuserrole.js')(app,db);
 require('./routes/addusertogroup.js')(app,db);
 require('./routes/removeuserfromgroup.js')(app,db);
 require('./routes/usergroupchannels.js')(app,db);
+require('./routes/recordhistory.js')(app,db);
 
 });

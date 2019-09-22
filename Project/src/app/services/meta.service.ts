@@ -37,6 +37,9 @@ AllGroups() { //this route is used for loading all the available groups
 AddChannel(group, channel) { //this route is used for adding a new channel
   return this.http.post<dataModel>('http://localhost:3000/api/createchannel',{group: group, channel: channel});
 } 
+AddChannelz(channel) { //this route is used for adding a new channel
+  return this.http.post<dataModel>('http://localhost:3000/api/createchannelz',{channel: channel});
+} 
 AddUser(user,email,password) { //this route is used for adding a new user
   return this.http.post<dataModel>('http://localhost:3000/api/createuser',{user: user, email:email,password:password});
 }
@@ -55,13 +58,19 @@ RemoveGroup(group) { //this route is used for removing a particular group
 RemoveChannel(channel) { //this route is used for removing a particular channel
   return this.http.post<dataModel>('http://localhost:3000/api/removechannel',{channel: channel});
 }
+RemoveChannelz(channel) { //this route is used for removing a particular channel
+  return this.http.post<dataModel>('http://localhost:3000/api/removechannelz',{channel: channel});
+}
+RemoveChannelzz(channel) { //this route is used for removing a particular channel
+  return this.http.post<dataModel>('http://localhost:3000/api/removechannelzz',{channel: channel});
+}
 RemoveUserfromChannel(user,channel) { //this route is used for removing a user from a channel
   return this.http.post<dataModel>('http://localhost:3000/api/removeuserfromchannel',{user:user,channel: channel});
 }
 RemoveUser(user) { //this route is used for removing a particular user
   return this.http.post<dataModel>('http://localhost:3000/api/removeuser',{user:user});
 }
-AssignUserGroupAssis(user) { //this route is used for assigning the user a role of group assis
+AssignUserGroupAssis(user,role) { //this route is used for assigning the user a role of group assis
   return this.http.post<any>('http://localhost:3000/api/assignusergroupassis',{user:user});
 }
 AssignUserRole(user,role) { //this route is used for assigning user a role
@@ -72,5 +81,8 @@ AddUsertoGroup(user,group) { //this route is used for adding user to a group
 }
 RemoveUserFromGroup(user,group) { //this route is used for removing user from a group
   return this.http.post<dataModel>('http://localhost:3000/api/removeuserfromgroup',{user:user, group: group});
+}
+RecordHistory(user,message, dateTime, channel) {
+  return this.http.post<dataModel>('http://localhost:3000/api/recordhistory',{user:user,message:message,dateTime:dateTime,channel:channel});
 } 
 }

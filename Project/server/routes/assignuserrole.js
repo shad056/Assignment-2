@@ -1,48 +1,38 @@
-module.exports = function(app,fs){
+module.exports = function(app,db){
    //This route adds a role to a user and checks if the user has already been added this role or not
     app.post('/api/assignuserrole', (req, res) => {
-        var isChannel = 0;
-        var userObj;
-        var isRole = 0;
-        var user = req.body.user;
-        var role = req.body.role;
+      var isRole = 0;
      
-        fs.readFile('./dataStorage/users.json','utf-8', function(err, data){
-            if (err){
-                console.log(err);
-            } else {
-            userObj = JSON.parse(data);
-            for (let i=0;i<userObj.length;i++){
-              if (userObj[i].user == user){
-                //Check for duplicates
-                for(let j=0;j<userObj[i].Roles.length;j++) {
-                if(userObj[i].Roles[j] == role) {
+      db.collection('users').find({user:req.body.user}).toArray(function (err, result) {
+          if (err) throw err;
+          //console.log(result.length+1);
+             for(var i=0;i<result.length;i++) {
+               for(var j=0;j<result[i].Roles.length;j++)
+               if(result[i].Roles[j] == req.body.role) {
                 isRole = 1;
-                }
             }
-              }
-            }
-            if(isRole == 1) {
-                res.send({valid:false});
-            }
-            else {
-                for (let i=0;i<userObj.length;i++){
-                    if (userObj[i].user == user){
-                      //Check for duplicates
-                      userObj[i].Roles.push(role);
-                    }
-                  }
-                  var newdata = JSON.stringify(userObj);
-                  fs.writeFile('./dataStorage/users.json',newdata,'utf-8',function(err){
-                    if (err) throw err;
-                    //Send response that registration was successfull.
-                    res.send({valid:true});
-                   });
-
-            }
-
+          }
             
-           }
-        })
+          if(isRole == 1) {
+            res.send({valid:false})
+          }
+          else {
+            var myquery = { user: req.body.user};
+            var newvalues = {$push: {Roles: req.body.role}};
+            db.collection('users').updateOne(myquery, newvalues, function(err, ress) {
+                if (err) throw err;
+                res.send({valid:true});
+            });
+          }
+                  
+           
+         
+         
+         
+        });
     });
 }
+
+
+  
+

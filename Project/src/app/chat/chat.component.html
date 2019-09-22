@@ -1,5 +1,13 @@
 <h2>Welcome to Channel {{channel}}</h2>
-
-<input placeholder="Type here to get started with your chat" type="text" style="margin:20px;" size="36"/>
+<img src="./server/userimages/{{imagepath}}" alt="Profile Pic" height="100" width="100">
+<input placeholder="Type here to get started with your chat" type="text" style="margin:20px;" size="36" [(ngModel)]="message"/>
 <br>
-<button style="margin: 20px;" class="btn btn-primary">Send Message</button>
+<button style="margin: 20px;" class="btn btn-primary" (click)="sendMessage()">Send Message</button>
+<button *ngIf="username" (click)="logout()" class="logout btn btn-danger">Leave Chat</button>
+<div class="messages">
+    <div *ngFor="let message of messages" class="message">
+      <span><strong>{{message.user}} : </strong> {{message.message}}</span>
+    </div>
+  
+  
+  </div>

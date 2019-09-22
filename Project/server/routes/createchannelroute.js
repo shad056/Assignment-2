@@ -7,61 +7,38 @@ module.exports = function(app,db){
             var group = req.body.group;
            var channel = req.body.channel;
 
-           db.collection('channels').find({Group:group,Channels:channel}).toArray(function (err, result) {
-            if (err) throw err;
-            //console.log(result.length+1);
-            if(result.length>0) {
-                res.send({valid:false});
-            }
+         
+            //console.log(result.length+1);           
+         
+                db.collection('channels').find({}).toArray(function (err2, result2) {
+                    if (err2) throw err2;
+                    for(var i=0;i<result2.length;i++) {
+                        for(var j=0;j<result2[i].Channels.length;j++)
+                        if(result2[i].Channels[j] == channel) {
+                            isChannel = 1;
+                        }
+                        
+                    }
+                    if(isChannel == 1) {
+                        res.send({valid:false});
+                    }
+                    else {
+                        var myquery = { Group: group};
+                        var newvalues = {$push: {Channels: channel}};
+                        db.collection("channels").updateOne(myquery, newvalues, function(err, ress) {
+                            if (err) throw err;
+                            res.send({valid:true});
+                        });
+                    }
+                });
+
+        });
+
+        app.post('/api/createchannelz', (req, res) => {
             
-            else {
-            var myquery = { Group: group};
-            var newvalues = {$push: {Channels: channel}};
-            db.collection("channels").updateOne(myquery, newvalues, function(err, ress) {
+            db.collection("channelhistory").insertOne({channel:req.body.channel,history:[]}, function(err, ress) {
                 if (err) throw err;
                 res.send({valid:true});
             });
-                }
-          });
-
-            // fs.readFile('./dataStorage/channels.json','utf-8', function(err, data){
-            //     if (err){
-            //         console.log(err);
-            //     } else {
-            //     userObj = JSON.parse(data);
-            //     for (let i=0;i<userObj.length;i++){
-            //       if (userObj[i].Group == groups){
-            //         //Check for duplicates
-            //         for(let j=0;j<userObj[i].Channels.length;j++) {
-            //         if(userObj[i].Channels[j] == channelname) {
-            //         isChannel = 1;
-            //         }
-            //     }
-            //       }
-            //     }
-            //     if (isChannel > 0){
-            //       //Name already exists in the file
-            //        res.send({newchannel:'',valid:false});
-            //      }else{
-            //       for (let i=0;i<userObj.length;i++){
-            //         if(userObj[i].Group == groups) {
-            //             userObj[i].Channels.push(channelname);                   
-                         
-            //         }
-            //       }
-            //        //Add name to list of names
-            //        //userObj.push({'newchannel':group})
-            //        //Prepare data for writing (convert to a string)
-            //        var newdata = JSON.stringify(userObj);
-            //        fs.writeFile('./dataStorage/channels.json',newdata,'utf-8',function(err){
-            //          if (err) throw err;
-            //          //Send response that registration was successfull.
-            //          res.send({newchannel:channelname,valid:true});
-            //         });
-            //      }
-            //    }
-            // })
-
-
-        });
+            });
     }
