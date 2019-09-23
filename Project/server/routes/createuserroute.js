@@ -16,7 +16,7 @@ module.exports = function(app,db){
                 res.send({valid:false});
             }
             else {
-            db.collection('users').insertOne({user:uname,password:password,email:email, Groups:[], Channels: [], Roles: []}, function(err, ress) {
+            db.collection('users').insertOne({user:uname,password:password,email:email, image:"",Groups:[], Channels: [], Roles: []}, function(err, ress) {
                 if (err) throw err;
                 
                 res.send({valid:true});

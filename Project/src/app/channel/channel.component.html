@@ -1,3 +1,9 @@
 <h2>Welcome to Channel {{channel}}</h2>
 
 <h3>You are viewing the history for this channel</h3>
+
+<ul>
+    <li *ngFor="let ss of messages">
+        {{ss}}
+    </li>
+</ul>

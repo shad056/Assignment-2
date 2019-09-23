@@ -85,4 +85,7 @@ RemoveUserFromGroup(user,group) { //this route is used for removing user from a 
 RecordHistory(user,message, dateTime, channel) {
   return this.http.post<dataModel>('http://localhost:3000/api/recordhistory',{user:user,message:message,dateTime:dateTime,channel:channel});
 } 
+ShowHistory(channel) {
+  return this.http.post<any>('http://localhost:3000/api/showhistory',{channel:channel});
+} 
 }

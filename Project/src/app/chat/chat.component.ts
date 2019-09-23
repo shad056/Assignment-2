@@ -11,6 +11,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import { MetaService } from '../services/meta.service';
+import { ImgUploadService } from '../services/Img/img-upload.service';
 
 
 const httpOptions = {
@@ -29,7 +30,10 @@ export class ChatComponent implements OnInit, OnDestroy {
   connection;
   channel;
   private postSub: Subscription;
-  constructor(private sockServ: SocketService, private router: Router, private form:FormsModule, private metaService: MetaService,private httpService: HttpClient,private route: ActivatedRoute) { }
+  selectedFile:File=null;
+  imagepath="";
+ 
+  constructor(private sockServ: SocketService, private router: Router, private form:FormsModule, private metaService: MetaService,private httpService: HttpClient,private route: ActivatedRoute,private imgUploadService:ImgUploadService) { }
 
   ngOnInit() {
     var user = JSON.parse(localStorage.getItem("userdetails")); //store the user details in the user variable
@@ -59,6 +63,15 @@ export class ChatComponent implements OnInit, OnDestroy {
     // this.messages.push(message);
     // this.message = '';
     // });
+    // this.httpService.get(this.apiURL + 'read')
+    //     .subscribe((data: any) => {
+    //       for (var i = 0; i < data.length; i++) {
+    //         if (data[i].user === this.username) {
+    //           this.imagepath = data[i].image;
+            
+    //         }
+    //       }
+    //     });
     this.sockServ.newMessageReceived()
         .subscribe(data=>this.messages.push(data));
        
@@ -126,4 +139,27 @@ export class ChatComponent implements OnInit, OnDestroy {
     });
   }
 
+  OnFileSelected(event){
+    this.selectedFile = <File>event.target.files[0];
+   }
+
+   imageObj: any = {};
+  OnUpload() {
+    const fd = new FormData();
+    fd.append('image',this.selectedFile,this.selectedFile.name);
+    this.imgUploadService.imguploads(fd).subscribe(res=>{
+     this.imagepath = res.data.filename;
+    
+     //this.imageObj = {username: this.username, imagename: this.imagepath}
+    //  this.httpService.post(this.apiURL + 'addImage', JSON.stringify(this.imageObj), httpOptions )
+    //    .subscribe((data: any) => {
+    //      if (data === true) {
+    //        alert("image uploaded succesfully");
+    //      } else {
+    //        alert("error");
+    //      }
+    //    });
+    
+  });
+}
 }

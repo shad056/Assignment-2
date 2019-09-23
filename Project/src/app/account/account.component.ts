@@ -2,13 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from '@angular/router';
 import {MetaService} from '../services/meta.service';
 import { HttpErrorResponse } from '@angular/common/http';
-import{HttpClient} from '@angular/common/http';
+import { HttpClient,  HttpHeaders, HttpHandler } from '@angular/common/http';
 import { dataModel } from '../services/Models/dataModel';
+import { ImgUploadService } from '../services/Img/img-upload.service';
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+};
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
   styleUrls: ['./account.component.css']
 })
+
 export class AccountComponent implements OnInit {
    username; //This variable is used to store the username of the user from the localStorage
    group = []; //All the groups associated with the user are stored in this array
@@ -21,8 +26,10 @@ export class AccountComponent implements OnInit {
    groupadmin = false; //this is used to check if a user is a group admin or not
    superadmin = false; //this is used to check if a user is a super admin or not
    groupassis = false; //this is used to check if a user is a group assis or not
-
-  constructor(private router: Router, private service: MetaService, private http: HttpClient) { }
+   selectedFile:File=null;
+   imagepath="";
+   private apiURL = 'http://localhost:3000/api/';
+  constructor(private router: Router, private service: MetaService, private httpService: HttpClient,private http: HttpClient, private imgUploadService:ImgUploadService, private metaService:MetaService) { }
 
   ngOnInit() {
 
@@ -53,7 +60,7 @@ export class AccountComponent implements OnInit {
           if(role == 'Super Admin') {
             this.superadmin = true;
           }
-
+          
       }
   
       }
@@ -63,33 +70,22 @@ export class AccountComponent implements OnInit {
     }
     );
    }
+   this.httpService.post(this.apiURL + 'read',{username:this.username})
+        .subscribe((data: any) => {
+          for (var i = 0; i < data.length; i++) {
+            if (data[i].user === this.username) {
+              this.imagepath = data[i].image;
+            
+            }
+          }
+        });
+    
   }
   onLogOut(){ 
     localStorage.removeItem("userdetails"); //Once the user presses the log out button, clear the local storage session
     this.router.navigateByUrl('/login');
   }
-  //onGroupClick(group: any) {
-   // if(group == 'Custom Channel Group') {
- 
-   // }
-    // else {
-    // this.http.post<dataModel>('http://localhost:3000/api/channels', {chosengroup: group}).subscribe(
-    //   res => {
-    //     if(res.valid == true) {
-    //       this.channels = res.channel;
-          
-    //     }
-    //     else {
-    //       this.channels = null;
-         
-    //     }
-    //   },
-    //   (err: HttpErrorResponse) => {
-    //     console.log (err.message);
-    //   }
-    // );
-    // }
-  //}
+  
   onChannelClick() { //Once the user clicks the display channel history button, navigate to the history for the selected channel
     if(this.selectchannel == '') {
       this.error = true;
@@ -125,4 +121,27 @@ export class AccountComponent implements OnInit {
     var id = target.attributes.id.nodeValue;
     this.router.navigateByUrl('/group/' + id);
   }
+
+  OnFileSelected(event){
+    this.selectedFile = <File>event.target.files[0];
+   }
+
+   imageObj: any = {};
+  OnUpload() {
+    const fd = new FormData();
+    fd.append('image',this.selectedFile,this.selectedFile.name);
+    this.imgUploadService.imgupload(fd).subscribe(res=>{
+     this.imagepath = res.data.filename;
+     this.imageObj = {username: this.username, imagename: this.imagepath}
+     this.httpService.post(this.apiURL + 'addImage', JSON.stringify(this.imageObj), httpOptions )
+       .subscribe((data: any) => {
+         if (data === true) {
+           alert("image uploaded succesfully");
+         } else {
+           alert("error");
+         }
+       });
+    });
+   
+  }   
 }

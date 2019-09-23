@@ -1,6 +1,13 @@
 <h2>Welcome to Channel {{channel}}</h2>
 <img src="./server/userimages/{{imagepath}}" alt="Profile Pic" height="100" width="100">
 <input placeholder="Type here to get started with your chat" type="text" style="margin:20px;" size="36" [(ngModel)]="message"/>
+<form>
+  <div class="form-group">
+    <input type="file" class="form-control" (change)="OnFileSelected($event)" name="uploadFile" id="uploadFile"/>
+  </div>
+  <button class="btn btn-primary" type="button" (click)="OnUpload()">Submit</button>
+</form>
+<img src="images/{{imagepath}}" alt="Profile Pic" height="100" width="100">
 <br>
 <button style="margin: 20px;" class="btn btn-primary" (click)="sendMessage()">Send Message</button>
 <button *ngIf="username" (click)="logout()" class="logout btn btn-danger">Leave Chat</button>

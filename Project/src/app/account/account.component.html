@@ -1,6 +1,15 @@
 <h1>Accounts Page </h1>
-<img src="https://pbs.twimg.com/profile_images/956310291154792451/vnJC8b_P_400x400.jpg" style="height: 200px; width: 200px; margin: 20px;" alt="img">
+<img src="images/{{imagepath}}" alt="Profile Pic" height="100" width="100">
+
 <h2>Welcome {{username}}</h2>
+<h3>Profile Picture upload</h3>
+<form>
+  <div class="form-group">
+    <input type="file" class="form-control" (change)="OnFileSelected($event)" name="uploadFile" id="uploadFile"/>
+  </div>
+  <button class="btn btn-primary" type="button" (click)="OnUpload()">Submit</button>
+</form>
+
 
 <p>Your role/s is/are:</p>
   <ul>
@@ -55,3 +64,6 @@
 <button class="btn btn-primary" (click)="onChannelClick()">View Channel History</button>
 <button class="btn btn-primary" style="margin-left: 40px;" (click)="onChatClick()">Goto Chat</button>
 <button style="margin-left: 40px;" class="btn btn-success" (click)="onLogOut()">Log Out</button>
+
+  
+ 

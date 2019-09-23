@@ -25,7 +25,10 @@ const io = require('socket.io')(http);
 
 const formidable = require('formidable');
 require('./socket.js')(app, io);
-require('./routes/uploads.js')(app,formidable);
+app.get('/images',function(req,res) {
+  //res.sendFile(__dirname + './userimages/*');
+  console.log('here');
+});
 
 app.use('/images',express.static(path.join(__dirname,'./userimages')));
 
@@ -57,5 +60,9 @@ require('./routes/addusertogroup.js')(app,db);
 require('./routes/removeuserfromgroup.js')(app,db);
 require('./routes/usergroupchannels.js')(app,db);
 require('./routes/recordhistory.js')(app,db);
+require('./routes/addImage.js')(app,db);
+require('./routes/read.js')(app,db);
+require('./routes/showhistory.js')(app,db);
+require('./routes/upload.js')(app,formidable);
 
 });
