@@ -30,4 +30,35 @@ module.exports = function(app,db){
 
 
         });
+
+
+        app.post('/api/createuserz', (req, res) => {
+    
+            var isGroup = 0;
+            var userObj;
+          
+            var uname = req.body.user;
+            var email = req.body.email;
+            var password = req.body.password;
+            db.collection('users').find({user:uname}).toArray(function (err, result) {
+              if (err) throw err;
+              //console.log(result.length+1);
+              if(result.length>0) {
+                  res.send({valid:false});
+              }
+              else {
+              db.collection('users').insertOne({user:uname,password:password,email:email, image:"",Groups:['testgroup'], Channels: ['testchannel'], Roles: []}, function(err, ress) {
+                  if (err) throw err;
+                  
+                  res.send({valid:true});
+              });
+              
+                  }
+            });
+            
+  
+  
+  
+  
+          });
     }

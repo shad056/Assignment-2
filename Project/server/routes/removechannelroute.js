@@ -72,17 +72,17 @@ module.exports = function(app,db){
       
   });
 
-//   app.post('/api/removechannelzz', function(req,res){
-//     console.log('here')
-//     if(!req.body) {
-//         return res.sendStatus(400);
-//     }
+  app.post('/api/removechannelzz', function(req,res){
+    console.log('here')
+    if(!req.body) {
+        return res.sendStatus(400);
+    }
 
  
-//     db.collection('channelhistory').remove({channel:req.body.channel}, {justOne:true},function(err, obj) {
-//       if (err) throw err;
-//       res.send({valid:true})
-// });
-//   });
+    db.collection('channelhistory').remove({channel:req.body.channel}, {justOne:true},function(err, obj) {
+      if (err) throw err;
+      res.send({valid:true})
+});
+  });
     }
     
