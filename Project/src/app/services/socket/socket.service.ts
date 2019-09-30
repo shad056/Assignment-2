@@ -31,7 +31,7 @@ export class SocketService {
 
   newUserJoined()
   {   
-      let observable = new Observable<{user:String, message:String}>(observer=>{
+      let observable = new Observable<{user:String, message:String,image:String}>(observer=>{
           //emit the new user joint event
               this.socket.on('join', (data)=>{	
               
@@ -49,7 +49,7 @@ export class SocketService {
 }
 
 userLeftRoom(){
-  let observable = new Observable<{user:String, message:String}>(observer=>{
+  let observable = new Observable<{user:String, message:String,image:String}>(observer=>{
       this.socket.on('leave', (data)=>{
           observer.next(data);
       });
@@ -76,14 +76,14 @@ userLeftRoom(){
 
   sendImage(image) {
     this.socket.emit('add-image', image);
-    console.log('sendImage emitted ' + image);
+  
   }
   sendMessage(data)
     {
         this.socket.emit('add-message',data);
     }
     newMessageReceived(){
-      let observable = new Observable<{user:String, message:String}>(observer=>{
+      let observable = new Observable<{user:String, message:String,image:String}>(observer=>{
           this.socket.on('new message', (data)=>{
               observer.next(data);
           });
@@ -92,6 +92,17 @@ userLeftRoom(){
 
       return observable;
   }
+
+  newImageReceived(){
+    let observable = new Observable<{user:String, message:String,image:String}>(observer=>{
+        this.socket.on('new image', (data)=>{
+            observer.next(data);
+        });
+        return () => {this.socket.disconnect();}
+    });
+
+    return observable;
+}
 
   getImages() {
     let obmessage = new Observable(

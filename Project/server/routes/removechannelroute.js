@@ -57,12 +57,12 @@ module.exports = function(app,db){
              
         db.collection("channels").update({Group:result[i].Group},query ,function(err2, ress) {
               if (err2) throw err;
-               else {
+              
             db.collection('channelhistory').remove({channel:req.body.channel}, {justOne:true},function(err, obj) {
      if (err) throw err;
       res.send({valid:true})
 });
-               }
+               
                 });
             }
           }

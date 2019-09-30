@@ -25,14 +25,16 @@ const httpOptions = {
 export class ChatComponent implements OnInit, OnDestroy {
   private apiURL = 'http://localhost:3000/api/';
   username: string
-  messages:Array<{user:String,message:String}> = [];
+ imgz = [];
   message;
   connection;
   channel;
   private postSub: Subscription;
   selectedFile:File=null;
   imagepath="";
- 
+  imagepathz="";
+  img = false;
+  messages:Array<{user:String,message:String,image:String}> = [];
   constructor(private sockServ: SocketService, private router: Router, private form:FormsModule, private metaService: MetaService,private httpService: HttpClient,private route: ActivatedRoute,private imgUploadService:ImgUploadService) { }
 
   ngOnInit() {
@@ -52,10 +54,11 @@ export class ChatComponent implements OnInit, OnDestroy {
     }else {
      //We have a valid username. Subscribe to chat service and add chat message
     //to the message array each time you are pushed a message from the server.
-  
-    this.joinChannel();
+    this.LoadImage(this.username);
+   // this.joinChannel();
    
    this.userJoinedChannel();
+   
 
    this.userLeftRoom();
     // this.connection = this.sockServ.getMessages().subscribe(message=>{
@@ -74,13 +77,27 @@ export class ChatComponent implements OnInit, OnDestroy {
     //     });
     this.sockServ.newMessageReceived()
         .subscribe(data=>this.messages.push(data));
-       
+      this.sockServ.newImageReceived()
+      .subscribe(data=>this.imgz.push(data));
       
 
     }
   }
-  joinChannel() {
-    this.sockServ.joinRoom({user:this.username, channel:this.channel});
+
+  async LoadImage(username) {
+    await this.httpService.post(this.apiURL + 'read',{username:username})
+   .subscribe((data: any) => {
+     for (var i = 0; i < data.length; i++) {
+       if (data[i].user === this.username) {
+         this.imagepath = data[i].image;
+         this.joinChannel();
+       }
+     }
+   });
+  }
+   joinChannel() {
+   
+     this.sockServ.joinRoom({user:this.username, channel:this.channel,image:this.imagepath});
    
     console.log("Session started for: " + this.username);
   }
@@ -98,6 +115,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     );
   }
   userLeftRoom() {
+    
     this.sockServ.userLeftRoom()
     .subscribe(data=> {
               this.messages.push(data)
@@ -113,7 +131,8 @@ export class ChatComponent implements OnInit, OnDestroy {
   sendMessage() {
     //Send a chat message back to the server
     // this.sockServ.sendMessage(this.message + '('+this.username+')');
-    this.sockServ.sendMessage({user:this.username, channel:this.channel, message:this.message});
+    
+    this.sockServ.sendMessage({user:this.username, channel:this.channel, message:this.message, image:this.imagepath});
     var today = new Date();
               var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
               var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
@@ -128,7 +147,7 @@ export class ChatComponent implements OnInit, OnDestroy {
     this.postSub.unsubscribe();
   }
   logout(){
-    this.sockServ.leaveRoom({user:this.username, channel:this.channel});
+    this.sockServ.leaveRoom({user:this.username, channel:this.channel,image:this.imagepath});
     console.log('Leaving the chat channel');
     localStorage.removeItem("channel");
     this.router.navigateByUrl('account');
@@ -148,8 +167,17 @@ export class ChatComponent implements OnInit, OnDestroy {
     const fd = new FormData();
     fd.append('image',this.selectedFile,this.selectedFile.name);
     this.imgUploadService.imguploads(fd).subscribe(res=>{
-     this.imagepath = res.data.filename;
-    
+     this.imagepathz = res.data.filename;
+    });
+     var today = new Date();
+              var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+              var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+              var dateTime = date+' '+ time;
+              this.img=true;
+     this.sockServ.sendImage({user:this.username, channel:this.channel, message:this.imagepathz, image:this.imagepath});
+     this.metaService.RecordHistory(this.username,' uploaded an image: ' + this.imagepathz,dateTime, this.channel).subscribe(res => {
+              
+    });
      //this.imageObj = {username: this.username, imagename: this.imagepath}
     //  this.httpService.post(this.apiURL + 'addImage', JSON.stringify(this.imageObj), httpOptions )
     //    .subscribe((data: any) => {
@@ -160,6 +188,6 @@ export class ChatComponent implements OnInit, OnDestroy {
     //      }
     //    });
     
-  });
+ 
 }
 }

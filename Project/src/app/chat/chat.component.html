@@ -1,5 +1,5 @@
 <h2>Welcome to Channel {{channel}}</h2>
-<img src="./server/userimages/{{imagepath}}" alt="Profile Pic" height="100" width="100">
+<img src="http://localhost:3000/api/images/{{imagepath}}" alt="Profile Pic" height="100" width="100">
 <input placeholder="Type here to get started with your chat" type="text" style="margin:20px;" size="36" [(ngModel)]="message"/>
 <form>
   <div class="form-group">
@@ -7,14 +7,18 @@
   </div>
   <button class="btn btn-primary" type="button" (click)="OnUpload()">Submit</button>
 </form>
-<img src="images/{{imagepath}}" alt="Profile Pic" height="100" width="100">
+<br>
+
 <br>
 <button style="margin: 20px;" class="btn btn-primary" (click)="sendMessage()">Send Message</button>
 <button *ngIf="username" (click)="logout()" class="logout btn btn-danger">Leave Chat</button>
 <div class="messages">
     <div *ngFor="let message of messages" class="message">
-      <span><strong>{{message.user}} : </strong> {{message.message}}</span>
+      <img src="http://localhost:3000/api/images/{{message.image}}" alt="Profile Pic" height="20" width="20"><span><strong>{{message.user}} :</strong> {{message.message}}</span>
     </div>
-  
-  
+  </div>
+  <div *ngIf="img">
+    <div *ngFor="let sd of imgz">
+      <span><strong>{{sd.user}} :</strong></span> <img src="http://localhost:3000/api/imagez/{{sd.message}}" alt="" height="100" width="100">
+  </div>
   </div>

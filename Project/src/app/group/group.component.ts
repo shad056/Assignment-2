@@ -111,6 +111,28 @@ export class GroupComponent implements OnInit, OnDestroy {
     else {
       this.service.RemoveGroup(this.selectgroup).subscribe(res => {
         this.channelz = res.channel;
+        if(this.channelz.length === 0) {
+          this.http.post<any>('http://localhost:3000/api/removegroupzz', {group:this.selectgroup}).subscribe(resss => {
+            if(resss.valid === true) {
+              this.http.post<any>('http://localhost:3000/api/removegroupzzz', {group:this.selectgroup}).subscribe(ressss => {
+                if(ressss.valid===true){
+                  this.errors = false;
+                  this.success = true;
+                  this.successmsg = this.selectgroup + ' has been successfully removed ';
+                  setTimeout(function(){ location.reload(); }, 3000);
+                }
+                else {
+                  this.success = false;
+                  this.errors = true;
+                  this.error = 'Group doesnt exists, Please try again';
+                }
+            
+            });
+            }  
+            
+            });
+        }
+        else {
         for(var i=0;i<this.channelz.length;i++) {
           this.http.post<any>('http://localhost:3000/api/removegroupz', {channel:this.channelz[i], group:this.selectgroup}).subscribe(ress => {
           if(ress.valid === true) {
@@ -137,7 +159,7 @@ export class GroupComponent implements OnInit, OnDestroy {
 
         });
         }
-       
+      }
   
       });
       }

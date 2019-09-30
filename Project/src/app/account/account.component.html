@@ -1,6 +1,7 @@
 <h1>Accounts Page </h1>
-<img src="images/{{imagepath}}" alt="Profile Pic" height="100" width="100">
-
+<div *ngIf="imagepath">
+<img src="http://localhost:3000/api/images/{{imagepath}}" alt="Profile Pic" height="100" width="100">
+</div>
 <h2>Welcome {{username}}</h2>
 <h3>Profile Picture upload</h3>
 <form>
@@ -21,7 +22,7 @@
     <button (click)="onGotoGroupComponent($event)" id="creategroup">Create Group</button>
     <button (click)="onGotoGroupComponent($event)" id="createchannel">Create Channel</button>
     <button (click)="onGotoUserComponent($event)" id="createuser" >Create User</button>
-    <div *ngIf="groupadmin">
+    <div *ngIf="groupadmin || superadmin">
       <button (click)="onGotoUserComponent($event)" id="adduseringroup">Add User in a Group</button>
     </div>
 

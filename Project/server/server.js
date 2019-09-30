@@ -30,7 +30,8 @@ app.get('/images',function(req,res) {
   console.log('here');
 });
 
-app.use('/images',express.static(path.join(__dirname,'./userimages')));
+app.use('/api/images',express.static(path.join(__dirname,'/userimages')));
+app.use('/api/imagez',express.static(path.join(__dirname,'/channelimages')));
 
 const MongoClient = require('mongodb').MongoClient;
 const url = 'mongodb://localhost:27017';

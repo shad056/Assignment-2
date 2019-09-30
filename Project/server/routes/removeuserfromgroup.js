@@ -22,7 +22,7 @@ module.exports = function(app,db){
           
         if(isRole == 1) {
           var myquery = { user: req.body.user};
-          var newvalues = {$pull: {Groups: req.body.group}};
+          var newvalues = {$pull: {Groups: req.body.group}, $set:{Channels: []}};
           db.collection('users').update(myquery, newvalues, function(err, ress) {
               if (err) throw err;
               res.send({valid:true});
