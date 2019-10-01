@@ -11,7 +11,7 @@ var api = supertest('http://localhost:3000');
 ///////////////////////////////////////////////////////////
 
 describe('The add image route',()=>{
-    before(function(){
+    before(function(){   ///This function is called before the test is executed
         api.post('/api/createuser')
         .set('Accept','application/x-www-form-urlencoded')
         .send({
@@ -21,7 +21,7 @@ describe('The add image route',()=>{
            if (err) throw err;
     });
 });
-    after(function(){
+    after(function(){   ///This function is called after the test is executed
         api.post('/api/removeuser')
         .set('Accept','application/x-www-form-urlencoded')
         .send({
@@ -617,7 +617,7 @@ after(function(){
          expect(res.body).to.not.have.property('error');
          done();
         });
-      });
+      })
   });
 
   /////////////////Get user data route/////////////////////////
