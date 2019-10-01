@@ -31,7 +31,7 @@ describe('The add image route',()=>{
            if (err) throw err;
          });
     });
-    it('should upload image and return true in response',function(done){
+    it('should upload image and return true in response',function(done){   //this is where the actual test is executed
       api.post('/api/addImage')
     .set('Accept','application/x-www-form-urlencoded')
     .send({
