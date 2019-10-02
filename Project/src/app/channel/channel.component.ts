@@ -13,6 +13,7 @@ export class ChannelComponent implements OnInit, OnDestroy {
  channel;
  messages = [];
  private postSub: Subscription;
+ 
   ngOnInit() {
    this.postSub = this.route.paramMap.subscribe(
       params => {this.channel = params.get('channel');}
@@ -20,10 +21,16 @@ export class ChannelComponent implements OnInit, OnDestroy {
     this.metaService.ShowHistory(this.channel).subscribe(res => {
       for(var i=0;i<res.result.length;i++) {
         for(var j=0;j<res.result[i].history.length;j++) {
+          // var patt1=/\.[0-9a-z]+$/i;
+          // if(res.result[i].history[j].match(patt1)) {
+          //   console.log(res.result[i].history[j].match('(?:[a-z][a-z]+)'));
+          
+          // }
         this.messages.push(res.result[i].history[j]);
       
         }
       }
+    
     });
   }
   ngOnDestroy() {

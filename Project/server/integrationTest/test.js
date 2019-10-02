@@ -172,7 +172,7 @@ describe('Adding user to a group route',()=>{
       });
   });
 
-   /////////////////Adding user to a group route/////////////////////////
+   /////////////////Assigning user a group assis role/////////////////////////
 ///////////////////////////////////////////////////////////
 
 describe('Assigning user a groupassis role route',()=>{
@@ -538,7 +538,7 @@ after(function(){
       });
   });
 
-    /////////////////Getting channels route/////////////////////////
+    /////////////////Getting users route/////////////////////////
 ///////////////////////////////////////////////////////////
 
 describe('Getting channels route',()=>{
@@ -548,7 +548,7 @@ describe('Getting channels route',()=>{
 after(function(){
   
 });
-    it('should get all groups',function(done){
+    it('should get all users',function(done){
       api.get('/api/getusers')
     .set('Accept','application/x-www-form-urlencoded')
    
@@ -559,7 +559,7 @@ after(function(){
        done();
       });
     });
-    it('should get all channels with no errors',function(done){
+    it('should get all users with no errors',function(done){
         api.get('/api/getusers')
       .set('Accept','application/x-www-form-urlencoded')
      
@@ -620,7 +620,7 @@ after(function(){
       })
   });
 
-  /////////////////Get user data route/////////////////////////
+  /////////////////Get a user data route/////////////////////////
 ///////////////////////////////////////////////////////////
 
 describe('Get user data route',()=>{
@@ -1018,7 +1018,7 @@ describe('Remove user route',()=>{
        done();
       });
     });
-    it('should not remove user from a group',function(done){
+    it('should not remove user',function(done){
         api.post('/api/removeuser')
       .set('Accept','application/x-www-form-urlencoded')
       .send({user:'Test3'})

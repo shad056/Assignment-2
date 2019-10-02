@@ -168,16 +168,18 @@ export class ChatComponent implements OnInit, OnDestroy {
     fd.append('image',this.selectedFile,this.selectedFile.name);
     this.imgUploadService.imguploads(fd).subscribe(res=>{
      this.imagepathz = res.data.filename;
-    });
      var today = new Date();
               var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
               var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
               var dateTime = date+' '+ time;
+              
               this.img=true;
      this.sockServ.sendImage({user:this.username, channel:this.channel, message:this.imagepathz, image:this.imagepath});
      this.metaService.RecordHistory(this.username,' uploaded an image: ' + this.imagepathz,dateTime, this.channel).subscribe(res => {
               
     });
+    });
+     
      //this.imageObj = {username: this.username, imagename: this.imagepath}
     //  this.httpService.post(this.apiURL + 'addImage', JSON.stringify(this.imageObj), httpOptions )
     //    .subscribe((data: any) => {

@@ -34,10 +34,6 @@ module.exports = function (app, io) {
 
     io.in(data.channel).emit('new image', {user:data.user, message:data.message, image:data.image});
   })
-
-   
-  
-  
   
   });
 

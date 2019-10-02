@@ -17,8 +17,8 @@
       <img src="http://localhost:3000/api/images/{{message.image}}" alt="Profile Pic" height="20" width="20"><span><strong>{{message.user}} :</strong> {{message.message}}</span>
     </div>
   </div>
-  <div *ngIf="img">
+  <div class="images">
     <div *ngFor="let sd of imgz">
-      <span><strong>{{sd.user}} :</strong></span> <img src="http://localhost:3000/api/imagez/{{sd.message}}" alt="" height="100" width="100">
+      <img src="http://localhost:3000/api/images/{{sd.image}}" alt="Profile Pic" height="20" width="20">  <span><strong>{{sd.user}} :</strong></span> <img src="http://localhost:3000/api/imagez/{{sd.message}}" alt="ss" height="100" width="100">
   </div>
-  </div>
+</div>
