@@ -54,13 +54,13 @@ export class ChatComponent implements OnInit, OnDestroy {
     }else {
      //We have a valid username. Subscribe to chat service and add chat message
     //to the message array each time you are pushed a message from the server.
-    this.LoadImage(this.username);
+    this.LoadImage(this.username); //this function loads the profile picture of the user
    // this.joinChannel();
    
-   this.userJoinedChannel();
+   this.userJoinedChannel();  //the user joins the channel
    
 
-   this.userLeftRoom();
+   this.userLeftRoom(); //this allows the user to leave the room
     // this.connection = this.sockServ.getMessages().subscribe(message=>{
     // //"message" is value of input field.
     // this.messages.push(message);
@@ -75,33 +75,33 @@ export class ChatComponent implements OnInit, OnDestroy {
     //         }
     //       }
     //     });
-    this.sockServ.newMessageReceived()
+    this.sockServ.newMessageReceived() //constantly look for new messages
         .subscribe(data=>this.messages.push(data));
-      this.sockServ.newImageReceived()
+      this.sockServ.newImageReceived() //constantly look for any image uploads
       .subscribe(data=>this.imgz.push(data));
       
 
     }
   }
 
-  async LoadImage(username) {
+  async LoadImage(username) { //this loads the image/profile picture of the user by retrieving the image name and rendering the server image
     await this.httpService.post(this.apiURL + 'read',{username:username})
    .subscribe((data: any) => {
      for (var i = 0; i < data.length; i++) {
        if (data[i].user === this.username) {
          this.imagepath = data[i].image;
-         this.joinChannel();
+         this.joinChannel(); //after the image is read the user joins the room
        }
      }
    });
   }
-   joinChannel() {
+   joinChannel() { //the user joins the channel with a message and emits its username, profile picture to the channel chat room
    
      this.sockServ.joinRoom({user:this.username, channel:this.channel,image:this.imagepath});
    
     console.log("Session started for: " + this.username);
   }
-  userJoinedChannel() {
+  userJoinedChannel() { //once the user has joined, it receives the emitted data from the server and pushes it to an array
     this.sockServ.newUserJoined() //constructor has suscribed to this event and when event is received push it on to the messageArray
     .subscribe(data=> {this.messages.push(data)
               var today = new Date();
@@ -114,7 +114,7 @@ export class ChatComponent implements OnInit, OnDestroy {
             }
     );
   }
-  userLeftRoom() {
+  userLeftRoom() {  //this allows the user to leave the room and also emit a leave channel message
     
     this.sockServ.userLeftRoom()
     .subscribe(data=> {
@@ -146,24 +146,24 @@ export class ChatComponent implements OnInit, OnDestroy {
     }
     this.postSub.unsubscribe();
   }
-  logout(){
+  logout(){ //this allows the user to log out and leave the room
     this.sockServ.leaveRoom({user:this.username, channel:this.channel,image:this.imagepath});
     console.log('Leaving the chat channel');
     localStorage.removeItem("channel");
     this.router.navigateByUrl('account');
   }
-  ChannelHistory(a,b,c,d) {
+  ChannelHistory(a,b,c,d) { //channel history is recorded through sending a post request to server to store history details in the database
     this.metaService.RecordHistory(a,b,c,d).subscribe(res => {
 
     });
   }
 
-  OnFileSelected(event){
+  OnFileSelected(event){ //allows to select a file on the client side
     this.selectedFile = <File>event.target.files[0];
    }
 
    imageObj: any = {};
-  OnUpload() {
+  OnUpload() { //the selected file is uploaded on a server folder and further more the image name is emitted and received in the channel to call the image from the server to be displayed in the channel
     const fd = new FormData();
     fd.append('image',this.selectedFile,this.selectedFile.name);
     this.imgUploadService.imguploads(fd).subscribe(res=>{
