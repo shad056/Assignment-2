@@ -119,7 +119,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                   this.errors = false;
                   this.success = true;
                   this.successmsg = this.selectgroup + ' has been successfully removed ';
-                  setTimeout(function(){ location.reload(); }, 3000);
+                //  setTimeout(function(){ location.reload(); }, 3000);
                 }
                 else {
                   this.success = false;
@@ -143,7 +143,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                   this.errors = false;
                   this.success = true;
                   this.successmsg = this.selectgroup + ' has been successfully removed ';
-                  setTimeout(function(){ location.reload(); }, 3000);
+                  //setTimeout(function(){ location.reload(); }, 3000);
                 }
                 else {
                   this.success = false;
@@ -178,7 +178,7 @@ export class GroupComponent implements OnInit, OnDestroy {
                   this.errors = false;
               this.success = true;
               this.successmsg = this.selectchannel + ' has been successfully removed ';
-              setTimeout(function(){ location.reload(); }, 3000);
+             // setTimeout(function(){ location.reload(); }, 3000);
               // this.service.RemoveChannelzz(this.selectchannel).subscribe(resss => {
               //   if(resss.valid===true) {
               //     this.errors = false;

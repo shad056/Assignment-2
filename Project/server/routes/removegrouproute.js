@@ -30,6 +30,7 @@ module.exports = function(app,db){
           if (err) throw err;
           //console.log(result.length+1);
           var query = {};
+          db.collection("channelhistory").remove({channel:req.body.channel}, {justOne:true});
             for(var i=0;i<result.length;i++) {
               for(var j=0;j<result[i].Channels.length;j++)
               if (result[i].Channels[j] == req.body.channel) {
@@ -40,12 +41,14 @@ module.exports = function(app,db){
                  else {
                    
                
-            res.send({valid:true});
+           
                  }
                   });
               }
+              
             }
-             
+            
+            res.send({valid:true});
          
         });
 
@@ -54,7 +57,7 @@ module.exports = function(app,db){
 
     app.post('/api/removegroupzz', function(req,res){
          
-       
+       var ss = false;
       db.collection('users').find({}).toArray(function (err, result) {
         if (err) throw err;
         //console.log(result.length+1);
@@ -67,10 +70,12 @@ module.exports = function(app,db){
         db.collection("users").update({user:result[i].user},query ,function(err2, ress) {
               if (err2) throw err;
                else {
-            res.send({valid:true});
+          
+              
                }
                 });
             }
+
           }
           // var query2 = {$pull:{Groups:req.body.group}};
           // db.collection("users").update({user:result[i].user},query2 ,function(err3, resss) {
@@ -79,6 +84,9 @@ module.exports = function(app,db){
           //    console.log('done');
           //   }
           //     });  
+          res.send({valid:true});
+         
+        
        
       });
 
